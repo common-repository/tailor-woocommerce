@@ -1,0 +1,36 @@
+
+( function( app, ElementAPI, Views ) {
+
+    'use strict';
+
+	ElementAPI.onRender( 'tailor_products', function( atts, model ) {
+		var $el = this.$el;
+		var options;
+
+		if ( 'carousel' == atts.layout ) {
+			options = {
+				autoplay : '1' == atts.autoplay,
+				arrows : '1' == atts.arrows,
+				dots : '1' == atts.dots,
+				fade : ( '1' == atts.fade && '1' == atts.items_per_row ),
+				infinite: false,
+				slidesToShow : parseInt( atts.items_per_row, 10 ) || 2
+			};
+
+			this.$el.tailorSimpleCarousel( options ) ;
+		}
+		else if ( 'grid' == atts.layout && atts.masonry ) {
+			$el.tailorMasonry();
+		}
+
+		if ( this.el.classList.contains( 'is-lightbox-gallery' ) ) {
+			$el.tailorLightbox( {
+				delegate : '.entry__thumbnail > a',
+				disableOn : function() {
+					return $el.hasClass( 'is-selected' );
+				}
+			} );
+		}
+    } );
+	
+} ) ( window.app, window.Tailor.Api.Element, Tailor.Views || {} );
